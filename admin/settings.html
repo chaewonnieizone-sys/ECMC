@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Settings | EC Marketing Corporation</title>
+  <meta name="description" content="Settings, data export, import, and maintenance for EC Marketing Corporation.">
+  <link rel="icon" href="../images/logo.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../vendor/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" onerror="this.remove()">
+  <script src="../js/store.js"></script>
+  <script src="../js/cart.js"></script>
+  <script defer src="../js/products.js"></script>
+  <script defer src="../js/layout.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/admin.js"></script>
+</head>
+<body data-admin-page="settings">
+  <div id="layout-header"></div>
+
+<main class="py-4 admin-main">
+    <div class="container-xl" style="max-width: 980px;">
+    <section class="page-title-card page-title-card--charcoal mb-4">
+      <span class="page-title-card__label">Administration</span>
+      <h1 class="page-title-card__title">Settings & Data</h1>
+      <p class="page-title-card__text">Manage records, backups, and device-stored data for this portal.</p>
+    </section>
+    <div class="alert alert-info d-flex gap-2 align-items-start" role="note"><i class="bi bi-shield-check fs-5" aria-hidden="true"></i><div><strong>Privacy (RA 10173):</strong> Customer and order information is handled for order processing, inquiries, and service follow-up in accordance with the Data Privacy Act of 2012. Please manage stored records responsibly and protect personal information.</div></div>
+    <div class="row g-4 mt-1">
+      <div class="col-md-6"><div class="card dashboard-panel h-100"><div class="card-body"><div class="kpi-icon text-primary"><i class="bi bi-database-add"></i></div><h2 class="h5">Load sample data</h2><p class="text-body-secondary small">Adds 8 sample orders (varied statuses, includes repeat customer by mobile), 4 inquiries, 2 bulk quotes, and 5 feedback entries. All records are prefixed with <strong>SAMPLE</strong>.</p><button class="btn btn-primary" id="loadSampleBtn" type="button">Load sample data</button></div></div></div>
+      <div class="col-md-6"><div class="card dashboard-panel h-100"><div class="card-body"><div class="kpi-icon text-warning"><i class="bi bi-arrow-down-up"></i></div><h2 class="h5">Export / Import</h2><p class="text-body-secondary small">Download all stored data as JSON, or import a previously exported file to restore records on this device.</p><div class="d-flex flex-wrap gap-2"><button class="btn btn-outline-primary" id="exportBtn" type="button">Export JSON</button><label class="btn btn-outline-secondary mb-0" for="importFile">Import JSON</label><input class="d-none" type="file" id="importFile" accept="application/json"></div></div></div></div>
+      <div class="col-12"><div class="card dashboard-panel border-danger"><div class="card-body"><div class="kpi-icon text-danger"><i class="bi bi-exclamation-triangle"></i></div><h2 class="h5 text-danger">Reset stored data</h2><p class="text-body-secondary small mb-3">Clears all <code>ecm_*</code> keys in this browser (products cache, orders, inquiries, quotes, feedback, events, cart). Storefront will reseed products from defaults on next load.</p><button class="btn btn-danger" id="resetBtn" type="button">Reset all ecm_* data</button></div></div></div>
+    </div>
+    <div id="settingsStatus" class="alert d-none mt-3" role="status"></div>
+  </div></main>
+
+  <div id="layout-footer"></div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+  <script src="../vendor/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" onerror="void 0"></script>
+</body>
+</html>

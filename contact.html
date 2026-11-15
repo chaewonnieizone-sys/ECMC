@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact | EC Marketing Corporation</title>
+    <link rel="icon" href="images/logo.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css'">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" onerror="this.remove()">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="has-mobile-bar contact-page">
+  <div id="layout-header"></div>
+  <div id="layout-cart-offcanvas"></div>
+
+<main id="main" class="py-4"><div class="container">
+    <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="index.html">Home</a></li><li class="breadcrumb-item active" aria-current="page">Contact</li></ol></nav>
+    <section class="page-title-card mb-4">
+      <span class="page-title-card__label">Get in Touch</span>
+      <h1 class="page-title-card__title">Contact EC Marketing Corporation</h1>
+      <p class="page-title-card__text">Visit us, call, or send an inquiry for product availability and project needs.</p>
+    </section>
+    <div class="row g-3 mb-4">
+      <div class="col-md-6 col-lg-3"><div class="card h-100"><div class="card-body"><h2 class="h6">Address</h2><p class="mb-0">Lim Guan Kho (LGK) Building, Rosales Boulevard, Barangay Central, Calbayog City, Samar 6710</p></div></div></div>
+      <div class="col-md-6 col-lg-3"><div class="card h-100"><div class="card-body"><h2 class="h6">Phone</h2><p class="mb-1">Landline: <a href="tel:+63555338161">(055) 533-8161</a></p><p class="mb-0">Mobile: <a href="tel:+639171341638">+63 917 134 1638</a></p></div></div></div>
+      <div class="col-md-6 col-lg-3"><div class="card h-100"><div class="card-body"><h2 class="h6">Email & Facebook</h2><p class="mb-1"><a href="mailto:info@calbayogec.com">info@calbayogec.com</a></p><p class="mb-0"><a href="https://www.facebook.com/" target="_blank" rel="noopener">Calbayog EC Marketing (placeholder)</a></p></div></div></div>
+      <div class="col-md-6 col-lg-3"><div class="card h-100"><div class="card-body"><h2 class="h6">Store hours</h2><p class="mb-1">Mon–Fri: 8:00 AM – 5:00 PM</p><p class="mb-0">Sat: 8:00 AM – 1:00 PM</p></div></div></div>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="card h-100"><div class="card-body">
+          <h2 class="h4">Send an inquiry</h2>
+          <form id="contactForm" class="needs-validation" novalidate>
+            <div class="mb-3"><label for="cName" class="form-label">Full name</label><input id="cName" class="form-control" required><div class="invalid-feedback">Please enter your name.</div></div>
+            <div class="mb-3"><label for="cMobile" class="form-label">Mobile number</label><input id="cMobile" class="form-control" required pattern="^(09|\+639)\d{9}$" placeholder="09XXXXXXXXX or +639XXXXXXXXX"><div class="invalid-feedback">Enter a valid Philippine mobile number.</div></div>
+            <div class="mb-3"><label for="cEmail" class="form-label">Email (optional)</label><input id="cEmail" type="email" class="form-control"><div class="invalid-feedback">Enter a valid email.</div></div>
+            <div class="mb-3"><label for="cMessage" class="form-label">Message</label><textarea id="cMessage" class="form-control" rows="4" required></textarea><div class="invalid-feedback">Please enter your message.</div></div>
+            <div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="cPrivacy" required><label class="form-check-label" for="cPrivacy">I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Data Privacy Notice</a> (RA 10173).</label><div class="invalid-feedback">Consent is required.</div></div>
+            <button id="contactSubmit" class="btn btn-primary" type="submit"><span class="submit-label">Send inquiry</span><span class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span></button>
+          </form>
+        </div></div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card h-100"><div class="card-body d-flex flex-column">
+          <h2 class="h4">Find us</h2>
+          <div class="ratio ratio-4x3 map-frame position-relative mb-3">
+            <iframe id="contactMap" title="Map showing EC Marketing Corporation at the LGK Building, Rosales Boulevard, Calbayog City" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen style="border:0;width:100%;height:100%" src="https://www.google.com/maps?q=Lim%20Guan%20Kho%20Building%2C%20Rosales%20Boulevard%2C%20Barangay%20Central%20Calbayog%20City%20Samar%206710%2C%20Philippines&amp;output=embed" onload="this.classList.add('map-ready')" onerror="this.classList.add('map-failed')"></iframe>
+            <div class="map-placeholder" aria-hidden="true">
+              <i class="bi bi-geo-alt" aria-hidden="true"></i>
+              <div class="fw-semibold mt-2">Map unavailable offline</div>
+              <div class="small text-body-secondary mt-1">Lim Guan Kho (LGK) Building, Rosales Boulevard, Barangay Central, Calbayog City, Samar 6710, Philippines</div>
+            </div>
+          </div>
+          <div class="d-flex flex-wrap gap-2 map-btns mb-3">
+            <a id="btnOpenMaps" class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&amp;query=Lim%20Guan%20Kho%20(LGK)%20Building%2C%20Rosales%20Boulevard%2C%20Barangay%20Central%20Calbayog%20City%20Samar%206710%2C%20Philippines" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right me-1" aria-hidden="true"></i>Open in Google Maps</a>
+            <a id="btnDirections" class="btn btn-outline-secondary" href="https://www.google.com/maps/dir/?api=1&amp;destination=Lim%20Guan%20Kho%20(LGK)%20Building%2C%20Rosales%20Boulevard%2C%20Barangay%20Central%20Calbayog%20City%20Samar%206710%2C%20Philippines" target="_blank" rel="noopener noreferrer"><i class="bi bi-arrow-right-circle me-1" aria-hidden="true"></i>Get directions</a>
+            <button id="copyAddress" class="btn btn-outline-secondary" type="button"><i class="bi bi-clipboard me-1" aria-hidden="true"></i>Copy address</button>
+          </div>
+          <div class="map-info mb-3">
+            <p class="small text-body-secondary mb-1"><i class="bi bi-geo-alt me-1" aria-hidden="true"></i> Lim Guan Kho (LGK) Building, Rosales Boulevard, Barangay Central, Calbayog City, Samar 6710, Philippines</p>
+            <span class="small text-body-secondary" data-open-now></span>
+          </div>
+          <p class="small text-body-secondary mb-0">The map is provided by Google Maps.</p>
+        </div></div>
+      </div>
+    </div>
+  </div></main>
+
+  <div id="layout-footer"></div>
+  <div id="layout-mobile-bar"></div>
+
+  <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h2 class="modal-title h5" id="contactModalLabel">Inquiry submitted</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div id="contactSuccess" class="alert alert-success" role="status"></div><p class="small text-body-secondary mb-2">Optional: you can also message the shop directly (not required).</p><textarea id="contactText" class="form-control" rows="8" readonly></textarea></div><div class="modal-footer flex-wrap"><button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button><button type="button" class="btn btn-outline-primary" id="copyContact">Copy order message</button><a id="smsContact" class="btn btn-outline-primary" href="#">Send by text</a><a id="emailContact" class="btn btn-primary" href="#">Send by email</a></div></div></div></div>
+
+<script>
+  // Fix aria-hidden accessibility issue on modal
+  var contactModal = document.getElementById('contactModal');
+  if (contactModal) {
+    contactModal.addEventListener('show.bs.modal', function () { contactModal.setAttribute('aria-hidden', 'false'); });
+    contactModal.addEventListener('hidden.bs.modal', function () { contactModal.setAttribute('aria-hidden', 'true'); });
+  }
+</script>
+
+<script src="vendor/bootstrap/bootstrap.bundle.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'"></script>
+  <script src="js/products.js"></script><script src="js/store.js"></script><script src="js/cart.js"></script><script src="js/layout.js"></script><script src="js/main.js"></script>
+  <script>
+    /* Google Maps embed URL. To use the exact embed link: open the business location on Google Maps, click Share -> Embed a map, and copy the iframe src value into MAP_EMBED_URL below. Leave it empty ("") to build the src from the address automatically (no API key, no extra library). */
+    var MAP_EMBED_URL = "";
+
+    (function () {
+      var MAP_ADDR = "Lim Guan Kho (LGK) Building, Rosales Boulevard, Barangay Central, Calbayog City, Samar 6710, Philippines";
+      var MAP_FALLBACK = "https://www.google.com/maps?q=" + encodeURIComponent("Lim Guan Kho Building, Rosales Boulevard, Barangay Central, Calbayog City, Samar 6710, Philippines") + "&output=embed";
+      var iframe = document.getElementById("contactMap");
+      if (iframe) { iframe.src = MAP_EMBED_URL || MAP_FALLBACK; }
+      var enc = encodeURIComponent(MAP_ADDR);
+      var openEl = document.getElementById("btnOpenMaps");
+      var dirEl = document.getElementById("btnDirections");
+      if (openEl) { openEl.href = "https://www.google.com/maps/search/?api=1&query=" + enc; }
+      if (dirEl) { dirEl.href = "https://www.google.com/maps/dir/?api=1&destination=" + enc; }
+      var copyBtn = document.getElementById("copyAddress");
+      if (copyBtn && window.ECMUI) {
+        copyBtn.addEventListener("click", function () {
+          window.ECMUI.copyText(MAP_ADDR).then(function () { window.ECMUI.showToast("Address copied"); });
+        });
+      }
+    })();
+
+    var yearEl = document.getElementById('year'); if (yearEl) yearEl.textContent = new Date().getFullYear();
+    var cSubmitting=false;
+    document.getElementById('contactForm').addEventListener('submit', function(e){
+      e.preventDefault(); e.stopPropagation();
+      if(cSubmitting) return;
+      if(!this.checkValidity()){ this.classList.add('was-validated'); return; }
+      var btn=document.getElementById('contactSubmit');
+      cSubmitting=true; btn.disabled=true; btn.querySelector('.spinner-border').classList.remove('d-none');
+      var ref=(ECMStore&&ECMStore.uid)?ECMStore.uid("INQ"):"INQ-"+Date.now();
+      var em=document.getElementById('cEmail').value;
+      var msg = 'EC Marketing Corporation - Inquiry\nReference: '+ref+'\nName: '+document.getElementById('cName').value+'\nMobile: '+document.getElementById('cMobile').value;
+      if(em) msg+='\nEmail: '+em;
+      msg += '\nMessage: '+document.getElementById('cMessage').value;
+      var record = {
+        id: ref, ref: ref,
+        timestamp: (ECMStore&&ECMStore.nowIso)?ECMStore.nowIso():new Date().toISOString(),
+        type: "contact",
+        name: document.getElementById('cName').value,
+        mobile: document.getElementById('cMobile').value,
+        email: (em||""),
+        message: document.getElementById('cMessage').value,
+        status: "Pending", replied: false,
+        staffNote: ""
+      };
+      setTimeout(function(){
+        try { if(!(window.ECMStore&&ECMStore.saveInquiry)) throw new Error('store'); ECMStore.saveInquiry(record); }
+        catch(ex){ cSubmitting=false; btn.disabled=false; btn.querySelector('.spinner-border').classList.add('d-none'); ECMUI.showToast('Could not save inquiry. Please try again.'); return; }
+        document.getElementById('contactText').value = msg;
+        document.getElementById('contactSuccess').textContent = 'Inquiry submitted. Reference: '+ref+'. Our team will get back to you as soon as possible.';
+        document.getElementById('smsContact').href = 'sms:+639171341638?&body='+encodeURIComponent(msg);
+        document.getElementById('emailContact').href = 'mailto:info@calbayogec.com?subject='+encodeURIComponent('Website inquiry '+ref)+'&body='+encodeURIComponent(msg);
+        try { trackEvent('inquiry_sent', { page: 'contact', ref: ref }); } catch(ex){}
+        ECMUI.showToast('Inquiry submitted: '+ref);
+        new bootstrap.Modal(document.getElementById('contactModal')).show();
+        cSubmitting=false; btn.disabled=false; btn.querySelector('.spinner-border').classList.add('d-none');
+        document.getElementById('contactForm').reset();
+        document.getElementById('contactForm').classList.remove('was-validated');
+      }, 300);
+    });
+    document.getElementById('copyContact').addEventListener('click', function(){ ECMUI.copyText(document.getElementById('contactText').value).then(function(){ ECMUI.showToast('Inquiry copied'); }); });
+  </script>
+</body>
+</html>

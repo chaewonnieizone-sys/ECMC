@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inquiries & Quotes | EC Marketing Corporation</title>
+  <meta name="description" content="Manage inquiries and bulk quote requests for EC Marketing Corporation.">
+  <link rel="icon" href="../images/logo.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../vendor/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" onerror="this.remove()">
+  <script src="../js/store.js"></script>
+  <script src="../js/cart.js"></script>
+  <script defer src="../js/products.js"></script>
+  <script defer src="../js/layout.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/admin.js"></script>
+</head>
+<body data-admin-page="inquiries">
+  <div id="layout-header"></div>
+
+<main class="py-4 admin-main">
+    <div class="container-xl">
+    <section class="page-title-card page-title-card--charcoal mb-4">
+      <span class="page-title-card__label">Customer requests</span>
+      <h1 class="page-title-card__title">Inquiries & Bulk Quotes</h1>
+      <p class="page-title-card__text">Track, respond to, and manage customer inquiries and quote requests.</p>
+    </section>
+    <div class="card dashboard-panel">
+      <div class="card-header pb-0 border-bottom-0 bg-transparent">
+        <ul class="nav nav-tabs card-header-tabs" role="tablist">
+          <li class="nav-item" role="presentation"><button class="nav-link active" id="inq-tab" data-bs-toggle="tab" data-bs-target="#inq-pane" type="button" role="tab" aria-controls="inq-pane" aria-selected="true">Inquiries</button></li>
+          <li class="nav-item" role="presentation"><button class="nav-link" id="quote-tab" data-bs-toggle="tab" data-bs-target="#quote-pane" type="button" role="tab" aria-controls="quote-pane" aria-selected="false">Bulk quotes</button></li>
+        </ul>
+      </div>
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="inq-pane" role="tabpanel" aria-labelledby="inq-tab" tabindex="0">
+          <div class="table-responsive"><table class="table table-hover align-middle mb-0 admin-inquiries-table"><thead><tr><th>Date</th><th>From</th><th>Subject / Product</th><th>Status</th><th>Action</th></tr></thead><tbody id="inquiriesBody"><tr><td colspan="5" class="text-body-secondary p-4">Loading...</td></tr></tbody></table></div>
+        </div>
+        <div class="tab-pane fade" id="quote-pane" role="tabpanel" aria-labelledby="quote-tab" tabindex="0">
+          <div class="table-responsive"><table class="table table-hover align-middle mb-0 admin-inquiries-table"><thead><tr><th>Date</th><th>From</th><th>Project / Type</th><th>Status</th><th>Action</th></tr></thead><tbody id="quotesBody"><tr><td colspan="5" class="text-body-secondary p-4">Loading...</td></tr></tbody></table></div>
+        </div>
+      </div>
+    </div>
+  </div></main>
+
+  <div id="layout-footer"></div>
+
+  <div class="modal fade" id="recordModal" tabindex="-1" aria-labelledby="rmTitle" aria-hidden="true"><div class="modal-dialog modal-lg modal-dialog-scrollable"><div class="modal-content">
+    <div class="modal-header"><div><h2 class="modal-title h5 mb-0" id="rmTitle">Record</h2><div class="small text-body-secondary" id="rmDate"></div></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+    <div class="modal-body">
+      <p class="mb-1"><span class="fw-semibold">From:</span> <span id="rmFrom"></span></p>
+      <p class="mb-1"><span class="fw-semibold">Subject/Type:</span> <span id="rmSubject"></span></p>
+      <p class="mb-3 small text-body-secondary" id="rmMeta"></p>
+      <h3 class="h6">Message / Materials</h3>
+      <div class="border rounded p-3 bg-body-tertiary mb-3" id="rmMessage" style="white-space: pre-wrap;"></div>
+      <div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="rmReplied"><label class="form-check-label" for="rmReplied">Mark as replied</label></div>
+      <div><label class="form-label" for="rmStaffNote">Staff note</label><textarea class="form-control" id="rmStaffNote" rows="3" placeholder="Internal note or follow-up"></textarea></div>
+    </div>
+    <div class="modal-footer"><button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button><button type="button" class="btn btn-primary" id="rmSave">Save</button></div>
+  </div></div></div>
+
+<script>
+  // Fix aria-hidden accessibility issue on modal
+  var recordModal = document.getElementById('recordModal');
+  if (recordModal) {
+    recordModal.addEventListener('show.bs.modal', function () { recordModal.setAttribute('aria-hidden', 'false'); });
+    recordModal.addEventListener('hidden.bs.modal', function () { recordModal.setAttribute('aria-hidden', 'true'); });
+  }
+</script>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+  <script src="../vendor/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" onerror="void 0"></script>
+</body>
+</html>

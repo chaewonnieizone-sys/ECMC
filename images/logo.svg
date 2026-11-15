@@ -1,0 +1,12 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="48" fill="#F5B400"/>
+  <circle cx="50" cy="50" r="42" fill="#FFFFFF"/>
+  <clipPath id="c"><circle cx="50" cy="50" r="42"/></clipPath>
+  <g clip-path="url(#c)">
+    <rect x="0" y="0" width="100" height="45" fill="#D61F1F"/>
+    <rect x="0" y="45" width="100" height="10" fill="#FFFFFF"/>
+    <rect x="0" y="55" width="100" height="45" fill="#F5B400"/>
+  </g>
+  <circle cx="50" cy="50" r="42" fill="none" stroke="#F5B400" stroke-width="2"/>
+  <text x="50" y="57" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="28" fill="#231F20">EC</text>
+</svg>

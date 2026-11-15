@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Track Order | EC Marketing Corporation</title>
+  <meta name="description" content="Track your EC Marketing Corporation order status.">
+    <link rel="icon" href="images/logo.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css'">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" onerror="this.remove()">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="has-mobile-bar">
+  <div id="layout-header"></div>
+  <div id="layout-cart-offcanvas"></div>
+
+  <main id="main" class="py-4">
+    <div class="container">
+      <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="index.html">Home</a></li><li class="breadcrumb-item active" aria-current="page">Track order</li></ol></nav>
+      <section class="page-title-card mb-4">
+        <span class="page-title-card__label">Order Status</span>
+        <h1 class="page-title-card__title">Track Your Order</h1>
+        <p class="page-title-card__text">Enter your reference and mobile number to view the latest order updates.</p>
+      </section>
+      <div style="max-width: 860px;">
+        <div class="alert alert-light border small" role="status">Enter the reference number and mobile number used when placing your order to view its latest status.</p>
+
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-body p-4">
+            <form id="trackForm" class="row g-3 needs-validation" novalidate>
+              <div class="col-md-6">
+                <label for="trackRef" class="form-label">Reference number</label>
+                <input type="text" class="form-control" id="trackRef" name="ref" placeholder="ECM-YYYYMMDD-####" required>
+                <div class="invalid-feedback">Please enter your reference number.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="trackMobile" class="form-label">Mobile number</label>
+                <input type="tel" class="form-control" id="trackMobile" name="mobile" placeholder="09XX XXX XXXX" required>
+                <div class="invalid-feedback">Please enter the mobile number used for the order.</div>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary">Track order</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div id="trackResult" class="d-none" aria-live="polite"></div>
+      </div>
+    </div>
+  </main>
+
+  <div id="layout-footer"></div>
+  <div id="layout-mobile-bar"></div>
+
+<script src="vendor/bootstrap/bootstrap.bundle.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'"></script>
+  <script src="js/products.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    var yearEl = document.getElementById('year'); if (yearEl) yearEl.textContent = new Date().getFullYear();
+    (function () {
+      var STEPS = ["New", "Confirmed (price and availability confirmed)", "Paid", "COD arranged", "Out for delivery", "Delivered"];
+      function qs(s) { return document.querySelector(s); }
+      function esc(v) { return String(v == null ? "" : v); }
+      function fmt(iso) { try { return new Date(iso).toLocaleString(); } catch (e) { return esc(iso); } }
+      function normalizePhone(v) { return esc(v).replace(/\D+/g, ""); }
+      function statusIndex(s) {
+        if (s === "Cancelled") return -1;
+        var i = STEPS.indexOf(s);
+        return i === -1 ? 0 : i;
+      }
+      function renderNotFound(ref) {
+        var box = qs("#trackResult");
+        if (!box) return;
+        box.className = "alert alert-warning";
+        box.innerHTML = "";
+        var strong = document.createElement("div"); strong.className = "fw-semibold mb-1"; strong.textContent = "We couldn't find a matching order.";
+        var p = document.createElement("p"); p.className = "mb-2 small";
+        p.textContent = "Please check the reference number and mobile number. If you need help, please contact EC Marketing Corporation with your reference number.";
+        var hint = document.createElement("p"); hint.className = "mb-0 small";
+        hint.textContent = ref ? ("You searched for: " + ref) : "";
+        box.appendChild(strong); box.appendChild(p); box.appendChild(hint);
+      }
+      function renderOrder(o) {
+        var box = qs("#trackResult");
+        if (!box) return;
+        box.className = "";
+        box.innerHTML = "";
+        var card = document.createElement("div"); card.className = "card shadow-sm border-0";
+        var body = document.createElement("div"); body.className = "card-body p-4";
+        var h = document.createElement("h2"); h.className = "h4 mb-1"; h.textContent = "Order " + (o.ref || o.id || "");
+        var meta = document.createElement("p"); meta.className = "text-body-secondary small mb-3";
+        meta.textContent = "Placed " + fmt(o.timestamp) + " · " + ((o.customer && o.customer.name) || "Customer");
+        var badge = document.createElement("span"); badge.className = "badge " + (o.status === "Delivered" ? "text-bg-success" : o.status === "Cancelled" ? "text-bg-secondary" : "text-bg-primary"); badge.textContent = o.status || "New";
+
+        body.appendChild(h); body.appendChild(meta); body.appendChild(badge);
+
+        if (o.status === "Cancelled") {
+          var c = document.createElement("div"); c.className = "alert alert-secondary mt-3 mb-0"; c.textContent = "This order was cancelled. Please contact the store if you need help.";
+          body.appendChild(c);
+        } else {
+          var idx = statusIndex(o.status || "New");
+          var wrap = document.createElement("div"); wrap.className = "mt-4";
+          var stepper = document.createElement("ol"); stepper.className = "list-group list-group-numbered";
+          STEPS.forEach(function (s, i) {
+            var li = document.createElement("li");
+            var done = i <= idx;
+            li.className = "list-group-item d-flex justify-content-between align-items-start " + (done ? "" : "text-body-secondary");
+            var left = document.createElement("div"); left.className = "ms-2 me-auto";
+            var t = document.createElement("div"); t.className = done ? "fw-semibold" : ""; t.textContent = s;
+            left.appendChild(t);
+            if (i === idx) { var cur = document.createElement("span"); cur.className = "badge text-bg-primary rounded-pill"; cur.textContent = "Current"; li.appendChild(left); li.appendChild(cur); }
+            else if (done) { var ok = document.createElement("span"); ok.className = "badge text-bg-success rounded-pill"; ok.textContent = "Done"; li.appendChild(left); li.appendChild(ok); }
+            else { li.appendChild(left); }
+            stepper.appendChild(li);
+          });
+          wrap.appendChild(stepper);
+          body.appendChild(wrap);
+        }
+
+        var tlTitle = document.createElement("h3"); tlTitle.className = "h6 mt-4"; tlTitle.textContent = "Status timeline";
+        body.appendChild(tlTitle);
+        var ul = document.createElement("ul"); ul.className = "list-group list-group-flush";
+        (o.timeline || []).forEach(function (t) {
+          var li = document.createElement("li"); li.className = "list-group-item px-0";
+          var s = document.createElement("div"); s.className = "fw-semibold"; s.textContent = t.status || "";
+          var d = document.createElement("div"); d.className = "small text-body-secondary"; d.textContent = fmt(t.at);
+          li.appendChild(s); li.appendChild(d); ul.appendChild(li);
+        });
+        if (!(o.timeline || []).length) { var li0 = document.createElement("li"); li0.className = "list-group-item px-0 text-body-secondary"; li0.textContent = "No timeline recorded yet."; ul.appendChild(li0); }
+        body.appendChild(ul);
+
+        card.appendChild(body); box.appendChild(card);
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        var form = qs("#trackForm");
+        if (!form) return;
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          form.classList.add("was-validated");
+          if (!form.checkValidity()) return;
+          var ref = (qs("#trackRef").value || "").trim();
+          var mobile = normalizePhone(qs("#trackMobile").value);
+          var orders = (window.ECMStore && ECMStore.getOrders) ? ECMStore.getOrders() : [];
+          var found = orders.find(function (o) {
+            var r = esc(o.ref || o.id).toLowerCase() === ref.toLowerCase();
+            var m = normalizePhone(o.customer && o.customer.mobile);
+            return r && m && m === mobile;
+          });
+          if (found) renderOrder(found); else renderNotFound(ref);
+        });
+        var params = new URLSearchParams(location.search);
+        if (params.get("ref") && qs("#trackRef")) qs("#trackRef").value = params.get("ref");
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bulk Quote | EC Marketing Corporation</title>
+    <link rel="icon" href="images/logo.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css'">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" onerror="this.remove()">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="has-mobile-bar">
+  <div id="layout-header"></div>
+  <div id="layout-cart-offcanvas"></div>
+
+<main id="main" class="py-4"><div class="container">
+    <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="index.html">Home</a></li><li class="breadcrumb-item active" aria-current="page">Bulk Quote</li></ol></nav>
+    <section class="page-title-card mb-4">
+      <span class="page-title-card__label">Bulk Orders</span>
+      <h1 class="page-title-card__title">Request a bulk or contractor quote</h1>
+      <p class="page-title-card__text">Send your materials list and project details for contractors, companies, and resellers.</p>
+    </section>
+    <p class="text-body-secondary mb-4">For contractors, construction companies, and stores or resellers. The shop will confirm availability, price, and delivery.</p>
+    <form id="quoteForm" class="needs-validation" novalidate>
+      <div class="row g-3">
+        <div class="col-md-6"><label for="qName" class="form-label">Full name</label><input id="qName" class="form-control" required><div class="invalid-feedback">Please enter your name.</div></div>
+        <div class="col-md-6"><label for="qCompany" class="form-label">Company</label><input id="qCompany" class="form-control" required><div class="invalid-feedback">Please enter company name.</div></div>
+        <div class="col-md-6"><label for="qType" class="form-label">Customer type</label><select id="qType" class="form-select" required><option value="">Choose...</option><option>Contractor</option><option>Construction company</option><option>Store or reseller</option></select><div class="invalid-feedback">Please select customer type.</div></div>
+        <div class="col-md-6"><label for="qMobile" class="form-label">Mobile number</label><input id="qMobile" class="form-control" required pattern="^(09|\+639)\d{9}$" placeholder="09XXXXXXXXX or +639XXXXXXXXX"><div class="invalid-feedback">Enter a valid Philippine mobile number.</div></div>
+        <div class="col-md-6"><label for="qEmail" class="form-label">Email (optional)</label><input id="qEmail" type="email" class="form-control"><div class="invalid-feedback">Enter a valid email.</div></div>
+        <div class="col-md-6"><label for="qLocation" class="form-label">Project location</label><input id="qLocation" class="form-control" required><div class="invalid-feedback">Please enter project location.</div></div>
+        <div class="col-12">
+          <label class="form-label">Materials and quantities</label>
+          <div id="materialsList" class="vstack gap-2"></div>
+          <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="addMaterial">Add material row</button>
+          <div class="form-text">List each material with quantity (e.g., Portland cement, 50 bags).</div>
+        </div>
+        <div class="col-md-4"><label for="qNeeded" class="form-label">Needed-by date</label><input id="qNeeded" type="date" class="form-control" required><div class="invalid-feedback">Please select a date.</div></div>
+        <div class="col-md-4"><label for="qDelivery" class="form-label">Delivery or pickup</label><select id="qDelivery" class="form-select" required><option value="">Choose...</option><option>Delivery</option><option>Pickup at the store</option></select><div class="invalid-feedback">Please select an option.</div></div>
+        <div class="col-12"><label for="qNotes" class="form-label">Notes</label><textarea id="qNotes" class="form-control" rows="3"></textarea></div>
+        <div class="col-12"><div class="form-check"><input class="form-check-input" type="checkbox" id="qPrivacy" required><label class="form-check-label" for="qPrivacy">I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Data Privacy Notice</a> (RA 10173) for processing this quote request.</label><div class="invalid-feedback">Consent is required.</div></div></div>
+        <div class="col-12"><button id="quoteSubmit" class="btn btn-primary" type="submit"><span class="submit-label">Submit quote request</span><span class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span></button></div>
+      </div>
+    </form>
+  </div></main>
+
+  <div id="layout-footer"></div>
+  <div id="layout-mobile-bar"></div>
+
+  <div class="modal fade" id="quoteModal" tabindex="-1" aria-labelledby="quoteModalLabel" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><h2 class="modal-title h5" id="quoteModalLabel">Quote request submitted</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div id="quoteSuccess" class="alert alert-success" role="status"></div><p class="small text-body-secondary mb-2">Optional: you can also message the shop directly (not required).</p><textarea id="quoteText" class="form-control" rows="10" readonly></textarea></div><div class="modal-footer flex-wrap"><button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button><button type="button" class="btn btn-outline-primary" id="copyQuote">Copy order message</button><a id="smsQuote" class="btn btn-outline-primary" href="#">Send by text</a><a id="emailQuote" class="btn btn-primary" href="#">Send by email</a></div></div></div></div>
+
+<script>
+  // Fix aria-hidden accessibility issue on modal
+  var quoteModal = document.getElementById('quoteModal');
+  if (quoteModal) {
+    quoteModal.addEventListener('show.bs.modal', function () { quoteModal.setAttribute('aria-hidden', 'false'); });
+    quoteModal.addEventListener('hidden.bs.modal', function () { quoteModal.setAttribute('aria-hidden', 'true'); });
+  }
+</script>
+
+<script src="vendor/bootstrap/bootstrap.bundle.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'"></script>
+  <script src="js/products.js"></script><script src="js/store.js"></script><script src="js/cart.js"></script><script src="js/layout.js"></script><script src="js/main.js"></script>
+  <script>
+    var yearEl = document.getElementById('year'); if (yearEl) yearEl.textContent = new Date().getFullYear();
+    (function(){
+      var list = document.getElementById('materialsList');
+      function addRow(val){
+        var row = document.createElement('div'); row.className='input-group';
+        var input = document.createElement('input'); input.type='text'; input.className='form-control material-item'; input.placeholder='Material and quantity'; input.required=true; if(val) input.value=val;
+        var btn = document.createElement('button'); btn.type='button'; btn.className='btn btn-outline-danger'; btn.setAttribute('aria-label','Remove material row'); btn.textContent='Remove';
+        btn.addEventListener('click', function(){ if(list.children.length>1){ row.remove(); } else { input.value=''; } });
+        var fb = document.createElement('div'); fb.className='invalid-feedback'; fb.textContent='Please enter material and quantity.';
+        row.appendChild(input); row.appendChild(btn);
+        var wrap = document.createElement('div'); wrap.appendChild(row); wrap.appendChild(fb);
+        list.appendChild(wrap);
+      }
+      addRow('');
+      document.getElementById('addMaterial').addEventListener('click', function(){ addRow(''); });
+      var qSubmitting=false;
+      document.getElementById('quoteForm').addEventListener('submit', function(e){
+        e.preventDefault(); e.stopPropagation();
+        if(qSubmitting) return;
+        if(!this.checkValidity()){ this.classList.add('was-validated'); return; }
+        var items = Array.from(document.querySelectorAll('.material-item')).map(function(i){return i.value.trim();}).filter(Boolean);
+        if(!items.length){ ECMUI.showToast('Please add at least one material.'); return; }
+        var btn=document.getElementById('quoteSubmit');
+        qSubmitting=true; btn.disabled=true; btn.querySelector('.spinner-border').classList.remove('d-none');
+        var ref = (ECMStore&&ECMStore.uid)?ECMStore.uid("QUOTE"):"QUOTE-"+Date.now();
+        var em=document.getElementById('qEmail').value;
+        var lines = ['EC Marketing Corporation - Bulk/Contractor Quote Request',
+          'Reference: '+ref,
+          'Name: '+document.getElementById('qName').value,
+          'Company: '+document.getElementById('qCompany').value,
+          'Customer type: '+document.getElementById('qType').value,
+          'Mobile: '+document.getElementById('qMobile').value];
+        if(em) lines.push('Email: '+em);
+        lines.push('Project location: '+document.getElementById('qLocation').value);
+        lines.push('Needed-by date: '+document.getElementById('qNeeded').value);
+        lines.push('Delivery or pickup: '+document.getElementById('qDelivery').value);
+        lines.push(''); lines.push('Materials and quantities:');
+        items.forEach(function(it){ lines.push('- '+it); });
+        var notes=document.getElementById('qNotes').value; if(notes){ lines.push(''); lines.push('Notes: '+notes); }
+        lines.push(''); lines.push('The shop will confirm availability, price, and delivery.');
+        var msg = lines.join('\n');
+        var quoteRecord = {
+          id: ref, ref: ref,
+          timestamp: (ECMStore&&ECMStore.nowIso)?ECMStore.nowIso():new Date().toISOString(),
+          name: document.getElementById('qName').value,
+          company: document.getElementById('qCompany').value,
+          customerType: document.getElementById('qType').value,
+          mobile: document.getElementById('qMobile').value,
+          email: (em||""),
+          projectLocation: document.getElementById('qLocation').value,
+          neededBy: document.getElementById('qNeeded').value,
+          delivery: document.getElementById('qDelivery').value,
+          materials: items,
+          notes: (notes||""),
+          status: "Pending", replied: false,
+          staffNote: "",
+          message: msg
+        };
+        setTimeout(function(){
+          try {
+            if (!(window.ECMStore && ECMStore.saveQuote)) throw new Error('store');
+            ECMStore.saveQuote(quoteRecord);
+          } catch(ex){
+            qSubmitting=false; btn.disabled=false; btn.querySelector('.spinner-border').classList.add('d-none');
+            ECMUI.showToast('Could not save quote request. Please try again.'); return;
+          }
+          document.getElementById('quoteText').value = msg;
+          document.getElementById('quoteSuccess').textContent = 'Quote request submitted. Reference: '+ref+'. Our team will review your request and get back to you to confirm availability, pricing, and delivery.';
+          document.getElementById('smsQuote').href = 'sms:+639171341638?&body='+encodeURIComponent(msg);
+          document.getElementById('emailQuote').href = 'mailto:info@calbayogec.com?subject='+encodeURIComponent('Bulk quote request '+ref)+'&body='+encodeURIComponent(msg);
+          try { trackEvent('quote_request', { ref: ref, items: items.length, type: document.getElementById('qType').value }); } catch(ex){}
+          ECMUI.showToast('Quote request submitted: '+ref);
+          new bootstrap.Modal(document.getElementById('quoteModal')).show();
+          qSubmitting=false; btn.disabled=false; btn.querySelector('.spinner-border').classList.add('d-none');
+          document.getElementById('quoteForm').reset();
+          document.getElementById('materialsList').innerHTML=''; addRow('');
+          document.getElementById('quoteForm').classList.remove('was-validated');
+        }, 400);
+      });
+      document.getElementById('copyQuote').addEventListener('click', function(){ ECMUI.copyText(document.getElementById('quoteText').value).then(function(){ ECMUI.showToast('Quote request copied'); }); });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product | EC Marketing Corporation</title>
+    <link rel="icon" href="images/logo.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css'">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" onerror="this.remove()">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="has-mobile-bar">
+  <div id="layout-header"></div>
+  <div id="layout-cart-offcanvas"></div>
+
+<main id="main" class="py-4"><div class="container">
+    <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="index.html">Home</a></li><li class="breadcrumb-item"><a href="shop.html">Shop</a></li><li class="breadcrumb-item active" aria-current="page" id="crumbName">Product</li></ol></nav>
+    <section class="page-title-card mb-4">
+      <span class="page-title-card__label" id="productCategoryLabel">Category</span>
+      <h1 class="page-title-card__title" id="productTitleLabel">Product</h1>
+      <p class="page-title-card__text">View product details, select options, and add to your cart.</p>
+    </section>
+    <div id="productWrap"></div>
+    <section class="mt-5"><h2 class="h4 mb-3">Related products</h2><div class="row g-3" id="relatedWrap"></div></section>
+  </div></main>
+
+  <div id="layout-footer"></div>
+  <div id="layout-mobile-bar"></div>
+
+<script src="vendor/bootstrap/bootstrap.bundle.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'"></script>
+  <script src="js/products.js"></script><script src="js/store.js"></script><script src="js/cart.js"></script><script src="js/layout.js"></script><script src="js/main.js"></script>
+  <script>
+    var yearEl = document.getElementById('year'); if (yearEl) yearEl.textContent = new Date().getFullYear();
+    (function(){
+      var id = new URLSearchParams(location.search).get('id');
+      var p = getProductById(id);
+      var wrap = document.getElementById('productWrap');
+      if (!p) {
+        document.getElementById('crumbName').textContent = 'Not found';
+        wrap.innerHTML = '<div class="alert alert-warning"><h1 class="h4">Product not found</h1><p class="mb-2">The product you are looking for is unavailable.</p><a href="shop.html" class="btn btn-primary">Back to shop</a></div>';
+        return;
+      }
+      trackEvent('product_view', { id: p.id, name: p.name });
+      document.title = p.name + ' | EC Marketing Corporation';
+      document.getElementById('crumbName').textContent = p.name;
+      document.getElementById('productCategoryLabel').textContent = p.category;
+      document.getElementById('productTitleLabel').textContent = p.name;
+
+      function getSelections() {
+        var sel = {};
+        if (!productHasOptions(p)) return sel;
+        p.options.forEach(function(opt){
+          var el = document.querySelector('[data-opt-key="'+opt.key+'"]');
+          if (el && el.value) sel[opt.key] = el.value;
+        });
+        return sel;
+      }
+      function current() { return resolveProduct(p, getSelections()); }
+
+      var optsHtml = '';
+      if (productHasOptions(p)) {
+        optsHtml = '<div class="border rounded-3 p-3 mb-3"><div class="fw-semibold mb-2">Select options</div>' + p.options.map(function(opt){
+          var oid = 'opt-'+opt.key;
+          return '<div class="mb-2"><label class="form-label mb-1" for="'+oid+'">'+opt.name+'</label><select class="form-select product-opt" id="'+oid+'" data-opt-key="'+opt.key+'"></select></div>';
+        }).join('') + '<div class="form-text">Selected options are included in your cart and order message.</div></div>';
+      }
+      wrap.innerHTML = '<div class="row g-4"><div class="col-lg-5"><img id="pImg" src="" alt="" class="img-fluid rounded-4 border placeholder-img w-100"></div><div class="col-lg-7"><div class="mb-2" id="pBadges"></div><h1 class="h2" id="pName"></h1><p class="text-body-secondary mb-1" id="pMeta"></p><p class="mb-1"><strong>Selected:</strong> <span id="pSize"></span></p><p class="lead fw-semibold" id="pPrice"></p><p id="pDesc"></p>'
+        + optsHtml
+        + '<div class="d-flex flex-wrap align-items-end gap-2 mb-3"><div><label for="qty" class="form-label">Quantity</label><div class="input-group quantity-input-group" role="group" aria-label="Quantity"><button class="btn btn-outline-secondary" type="button" id="qtyMinus" aria-label="Decrease quantity">−</button><input type="number" class="form-control text-center" id="qty" value="1" min="1" aria-label="Quantity"><button class="btn btn-outline-secondary" type="button" id="qtyPlus" aria-label="Increase quantity">+</button></div></div><button class="btn btn-primary" id="addBtn" type="button">Add to cart</button><button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#inquiryModal">Ask about availability</button></div>'
+        + '<div class="accordion" id="productAccordion">'
+        + '<div class="accordion-item"><h2 class="accordion-header" id="hDetails"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cDetails" aria-expanded="true" aria-controls="cDetails">Details</button></h2><div id="cDetails" class="accordion-collapse collapse show" aria-labelledby="hDetails" data-bs-parent="#productAccordion"><div class="accordion-body"><ul class="mb-0" id="detailList"></ul></div></div></div>'
+        + '<div class="accordion-item"><h2 class="accordion-header" id="hDelivery"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cDelivery" aria-expanded="false" aria-controls="cDelivery">Delivery and cash on delivery</button></h2><div id="cDelivery" class="accordion-collapse collapse" aria-labelledby="hDelivery" data-bs-parent="#productAccordion"><div class="accordion-body">Free delivery and cash on delivery, terms confirmed by the shop.</div></div></div>'
+        + '<div class="accordion-item"><h2 class="accordion-header" id="hQuality"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cQuality" aria-expanded="false" aria-controls="cQuality">Quality and certification note</button></h2><div id="cQuality" class="accordion-collapse collapse" aria-labelledby="hQuality" data-bs-parent="#productAccordion"><div class="accordion-body">EC Marketing Corporation offers quality products from DTI-certified brands at reasonable prices.</div></div></div>'
+        + '</div></div></div>'
+        + '<div class="modal fade" id="inquiryModal" tabindex="-1" aria-labelledby="inquiryModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><form id="inquiryForm" class="needs-validation" novalidate><div class="modal-header"><h2 class="modal-title h5" id="inquiryModalLabel">Ask about availability</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><p class="small text-body-secondary">Product: <strong id="inqProduct"></strong></p><div class="mb-3"><label for="inqName" class="form-label">Full name</label><input id="inqName" class="form-control" required><div class="invalid-feedback">Please enter your name.</div></div><div class="mb-3"><label for="inqMobile" class="form-label">Mobile number</label><input id="inqMobile" class="form-control" required pattern="^(09|\\+639)\\d{9}$" placeholder="09XXXXXXXXX or +639XXXXXXXXX"><div class="invalid-feedback">Enter a valid Philippine mobile number.</div></div><div class="mb-3"><label for="inqMsg" class="form-label">Message</label><textarea id="inqMsg" class="form-control" rows="4" required></textarea><div class="invalid-feedback">Please enter a message.</div></div><div class="form-check"><input class="form-check-input" type="checkbox" id="inqPrivacy" required><label class="form-check-label" for="inqPrivacy">I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Data Privacy Notice</a> (RA 10173).</label><div class="invalid-feedback">Consent is required.</div></div></div><div class="modal-footer"><button type="submit" class="btn btn-primary">Prepare inquiry</button></div></form></div></div></div>'
+        + '<div class="modal fade" id="inquiryResultModal" tabindex="-1" aria-labelledby="inquiryResultLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h2 class="modal-title h5" id="inquiryResultLabel">Inquiry submitted</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div id="inquirySuccess" class="alert alert-success" role="status"></div><p class="small text-body-secondary mb-2">Optional: you can also message the shop directly (not required).</p><textarea id="inquiryText" class="form-control" rows="9" readonly></textarea></div><div class="modal-footer flex-wrap"><button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button><button type="button" class="btn btn-outline-primary" id="copyInquiry">Copy order message</button><a id="smsInquiry" class="btn btn-outline-primary" href="#">Send by text</a><a id="emailInquiry" class="btn btn-primary" href="#">Send by email</a></div></div></div></div>';
+
+      // Fix aria-hidden accessibility issue on dynamically created modals
+      ['inquiryModal', 'inquiryResultModal'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('show.bs.modal', function () { el.setAttribute('aria-hidden', 'false'); }, { once: true });
+          el.addEventListener('hidden.bs.modal', function () { el.setAttribute('aria-hidden', 'true'); }, { once: true });
+        }
+      });
+
+      if (productHasOptions(p)) {
+        p.options.forEach(function(opt){
+          var sel = document.querySelector('[data-opt-key="'+opt.key+'"]');
+          if (!sel) return;
+          opt.choices.forEach(function(c){
+            var o = document.createElement('option');
+            o.value = c.value; o.textContent = c.label + (c.price !== undefined && c.price !== null ? ' — ' + formatPeso(c.price) : '');
+            sel.appendChild(o);
+          });
+        });
+      }
+
+      function refresh() {
+        var d = current();
+        var badgesWrap = document.getElementById('pBadges');
+        badgesWrap.innerHTML = '';
+        if (p.badge) { var b=document.createElement('span'); b.className='badge text-bg-warning me-1'; b.textContent=p.badge; badgesWrap.appendChild(b); }
+        var sb = document.createElement('span'); sb.className = 'badge ' + (d.inStock ? 'text-bg-success' : 'text-bg-secondary'); sb.textContent = d.inStock ? 'In stock' : 'Coming soon'; badgesWrap.appendChild(sb);
+        document.getElementById('pName').textContent = p.name;
+        document.getElementById('pMeta').textContent = (d.brand || p.brand) + ' · ' + p.category;
+        document.getElementById('pSize').textContent = d.variantLabel || d.size || p.size;
+        document.getElementById('pPrice').textContent = formatPeso(d.price);
+        document.getElementById('pDesc').textContent = p.description;
+        var img = document.getElementById('pImg'); img.src = d.image || p.image; img.alt = p.name;
+        var ul = document.getElementById('detailList'); ul.innerHTML = '';
+        [['Brand', d.brand || p.brand], ['Category', p.category], ['Selected option', d.variantLabel || d.size || p.size]].forEach(function(pair){
+          var li = document.createElement('li'); var st=document.createElement('strong'); st.textContent = pair[0]+': '; li.appendChild(st); li.appendChild(document.createTextNode(pair[1]||'')); ul.appendChild(li);
+        });
+        if (productHasOptions(p)) {
+          getSelectedChoices(p, getSelections()).forEach(function(ch){
+            var li = document.createElement('li'); var st=document.createElement('strong'); st.textContent = ch.name+': '; li.appendChild(st); li.appendChild(document.createTextNode(ch.label)); ul.appendChild(li);
+          });
+        }
+        var addBtn = document.getElementById('addBtn');
+        addBtn.disabled = !d.inStock;
+        addBtn.textContent = d.inStock ? 'Add to cart' : 'Coming soon';
+        document.getElementById('inqProduct').textContent = p.name + (d.variantLabel ? ' ('+d.variantLabel+')' : '');
+        var inq = document.getElementById('inqMsg');
+        if (inq && inq.dataset.touched !== '1') {
+          inq.value = 'Hi, I would like to ask about the availability of ' + p.name + (d.variantLabel ? ' — '+d.variantLabel : '') + '.';
+        }
+      }
+
+      document.querySelectorAll('.product-opt').forEach(function(sel){ sel.addEventListener('change', refresh); });
+      var qty = document.getElementById('qty');
+      document.getElementById('qtyMinus').addEventListener('click', function(){ qty.value = Math.max(1, parseInt(qty.value||1,10)-1); });
+      document.getElementById('qtyPlus').addEventListener('click', function(){ qty.value = Math.max(1, parseInt(qty.value||1,10)+1); });
+      document.getElementById('addBtn').addEventListener('click', function(){
+        var d = current(); if(!d.inStock) return;
+        ECMCart.addToCart(p.id, qty.value, getSelections());
+        ECMUI.renderOffcanvasCart(); ECMUI.showToast('Added to cart');
+      });
+
+      var inqMsg = document.getElementById('inqMsg');
+      inqMsg.addEventListener('input', function(){ inqMsg.dataset.touched = '1'; });
+      var inqSubmitting=false;
+      document.getElementById('inquiryForm').addEventListener('submit', function(e){
+        e.preventDefault(); e.stopPropagation();
+        if(inqSubmitting) return;
+        if(!this.checkValidity()){ this.classList.add('was-validated'); return; }
+        var btn=document.getElementById('inquirySubmit');
+        inqSubmitting=true; btn.disabled=true; var sp=btn.querySelector('.spinner-border'); if(sp) sp.classList.remove('d-none');
+        var d = current();
+        var ref=(ECMStore&&ECMStore.uid)?ECMStore.uid("INQ"):"INQ-"+Date.now();
+        var lines = ['EC Marketing Corporation - Product Inquiry', 'Reference: '+ref, 'Product: '+p.name];
+        if (d.variantLabel) lines.push('Selected option: '+d.variantLabel);
+        lines.push('Brand: '+(d.brand||p.brand));
+        lines.push('Price: '+formatPeso(d.price));
+        lines.push('Name: '+document.getElementById('inqName').value);
+        lines.push('Mobile: '+document.getElementById('inqMobile').value);
+        lines.push('Message: '+document.getElementById('inqMsg').value);
+        var msg = lines.join('\n');
+        var record = {
+          id: ref, ref: ref,
+          timestamp: (ECMStore&&ECMStore.nowIso)?ECMStore.nowIso():new Date().toISOString(),
+          type: "product",
+          productId: p.id,
+          productName: p.name,
+          selections: getSelections(),
+          variantLabel: (d.variantLabel||d.size||""),
+          name: document.getElementById('inqName').value,
+          mobile: document.getElementById('inqMobile').value,
+          message: document.getElementById('inqMsg').value,
+          status: "Pending", replied: false,
+          staffNote: ""
+        };
+        setTimeout(function(){
+          try { if(!(window.ECMStore&&ECMStore.saveInquiry)) throw new Error('store'); ECMStore.saveInquiry(record); }
+          catch(ex){ inqSubmitting=false; btn.disabled=false; if(sp) sp.classList.add('d-none'); ECMUI.showToast('Could not save inquiry. Please try again.'); return; }
+          document.getElementById('inquiryText').value = msg;
+          var ok=document.getElementById('inquirySuccess'); if(ok) ok.textContent = 'Inquiry submitted. Reference: '+ref+'. Our team will get back to you as soon as possible.';
+          document.getElementById('smsInquiry').href = 'sms:+639171341638?&body=' + encodeURIComponent(msg);
+          document.getElementById('emailInquiry').href = 'mailto:info@calbayogec.com?subject=' + encodeURIComponent('Product inquiry: '+p.name+' '+ref) + '&body=' + encodeURIComponent(msg);
+          bootstrap.Modal.getInstance(document.getElementById('inquiryModal')).hide();
+          new bootstrap.Modal(document.getElementById('inquiryResultModal')).show();
+          try { trackEvent('inquiry_sent', { id: p.id, ref: ref, selections: getSelections() }); } catch(ex){}
+          ECMUI.showToast('Inquiry submitted: '+ref);
+          inqSubmitting=false; btn.disabled=false; if(sp) sp.classList.add('d-none');
+          document.getElementById('inquiryForm').reset();
+          document.getElementById('inquiryForm').classList.remove('was-validated');
+          inqMsg.dataset.touched = '';
+        }, 300);
+      });
+      document.getElementById('copyInquiry').addEventListener('click', function(){ ECMUI.copyText(document.getElementById('inquiryText').value).then(function(){ ECMUI.showToast('Inquiry copied'); }); });
+
+      var related = getProductsList().filter(function(x){ return x.category===p.category && x.id!==p.id; }).slice(0,4);
+      var rw = document.getElementById('relatedWrap');
+      related.forEach(function(r){
+        var col = document.createElement('div'); col.className='col-6 col-lg-3';
+        var dr = resolveProduct(r, {});
+        var action = productHasOptions(r) ? '<button class="btn btn-sm btn-primary mt-auto" type="button" data-quick-add="'+r.id+'" '+(r.inStock?'':'disabled')+'>Add to cart</button>' : '<button class="btn btn-sm btn-primary mt-auto" type="button" data-add-to-cart="'+r.id+'" '+(r.inStock?'':'disabled')+'>Add to cart</button>';
+        col.innerHTML = '<div class="card h-100"><img src="'+dr.image+'" class="card-img-top placeholder-img" alt=""><div class="card-body d-flex flex-column"><h3 class="h6"></h3><p class="small text-body-secondary mb-1"></p><p class="fw-semibold mb-2"></p><a class="btn btn-sm btn-outline-primary mb-2" href="product.html?id='+encodeURIComponent(r.id)+'">View</a>'+action+'</div></div>';
+        col.querySelector('h3').textContent = r.name;
+        col.querySelector('img').alt = r.name;
+        col.querySelector('.small').textContent = (dr.brand||r.brand) + (productHasOptions(r)?' · Select options':'');
+        col.querySelector('.fw-semibold').textContent = formatPeso(dr.price);
+        rw.appendChild(col);
+      });
+
+      refresh();
+    })();
+  </script>
+</body>
+</html>

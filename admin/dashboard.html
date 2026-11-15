@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard | EC Marketing Corporation</title>
+  <meta name="description" content="Staff dashboard for EC Marketing Corporation.">
+  <link rel="icon" href="../images/logo.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../vendor/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" onerror="this.remove()">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" onerror="void 0"></script>
+  <script src="../js/store.js"></script>
+  <script src="../js/cart.js"></script>
+  <script defer src="../js/products.js"></script>
+  <script defer src="../js/layout.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/admin.js"></script>
+</head>
+<body data-admin-page="dashboard">
+  <div id="layout-header"></div>
+
+  <main class="py-4 admin-main">
+    <div class="container-xl">
+      <section class="page-title-card page-title-card--charcoal mb-4">
+        <span class="page-title-card__label">Operations</span>
+        <h1 class="page-title-card__title">Dashboard</h1>
+        <p class="page-title-card__text">Store operations overview, orders, inquiries, and inventory at a glance.</p>
+      </section>
+      <div id="newOrdersAlert" class="d-none mb-4" role="status"></div>
+
+      <!-- Quick Actions Bar -->
+      <div class="card mb-4 quick-actions-bar">
+        <div class="card-body">
+          <div class="d-flex flex-wrap gap-2">
+            <a href="orders.html?status=New" class="btn btn-primary d-flex align-items-center gap-2"><i class="bi bi-plus-lg"></i><span class="d-none d-sm-inline">New order</span></a>
+            <a href="products.html" class="btn btn-outline-secondary d-flex align-items-center gap-2"><i class="bi bi-box-seam"></i><span class="d-none d-sm-inline">Add product</span></a>
+            <a href="inquiries.html" class="btn btn-outline-secondary d-flex align-items-center gap-2"><i class="bi bi-chat-dots"></i><span class="d-none d-sm-inline">View inquiries</span></a>
+            <a href="feedback.html" class="btn btn-outline-secondary d-flex align-items-center gap-2"><i class="bi bi-star"></i><span class="d-none d-sm-inline">Feedback</span></a>
+            <a href="settings.html" class="btn btn-outline-secondary d-flex align-items-center gap-2 ms-auto"><i class="bi bi-gear"></i><span class="d-none d-sm-inline">Settings</span></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Stats -->
+      <div class="row row-cols-2 row-cols-md-3 row-cols-xl-6 g-3 mb-4 dashboard-kpis">
+        <!-- Total orders -->
+        <div class="col">
+          <a class="card kpi-card h-100 text-decoration-none" href="orders.html" aria-label="Total orders: 0. Open all orders." id="kpiTotalOrdersCard">
+            <div class="card-body d-flex flex-column">
+              <div class="kpi-icon-circle" aria-hidden="true"><i class="bi bi-receipt"></i></div>
+              <div class="kpi-label small text-body-secondary">Total orders</div>
+              <div class="kpi-value fs-3 fw-bold mb-1 tabular-nums" id="kpiOrders">0</div>
+              <div class="kpi-helper small text-body-secondary">All time</div>
+            </div>
+          </a>
+        </div>
+        <!-- New orders -->
+        <div class="col">
+          <a class="card kpi-card h-100 text-decoration-none" href="orders.html?status=New" aria-label="New orders: 0. Open the orders list filtered to new orders." id="kpiNewOrdersCard">
+            <div class="card-body d-flex flex-column">
+              <div class="kpi-icon-circle" aria-hidden="true"><i class="bi bi-bell-fill"></i></div>
+              <div class="kpi-label small text-body-secondary">New orders</div>
+              <div class="kpi-value fs-3 fw-bold mb-1 tabular-nums" id="kpiNewOrders">0</div>
+              <div class="kpi-helper small text-body-secondary">Awaiting confirmation</div>
+            </div>
+          </a>
+        </div>
+        <!-- Online inquiries -->
+        <div class="col">
+          <a class="card kpi-card h-100 text-decoration-none" href="inquiries.html" aria-label="Online inquiries: 0. Open all inquiries." id="kpiInquiriesCard">
+            <div class="card-body d-flex flex-column">
+              <div class="kpi-icon-circle" aria-hidden="true"><i class="bi bi-chat-dots"></i></div>
+              <div class="kpi-label small text-body-secondary">Online inquiries</div>
+              <div class="kpi-value fs-3 fw-bold mb-1 tabular-nums" id="kpiInquiries">0</div>
+              <div class="kpi-helper small text-body-secondary" id="kpiInquiriesHelper">Pending replies</div>
+            </div>
+          </a>
+        </div>
+        <!-- Bulk quote requests -->
+        <div class="col">
+          <a class="card kpi-card h-100 text-decoration-none" href="inquiries.html?tab=quotes" aria-label="Bulk quote requests: 0. Open the bulk quotes tab." id="kpiQuotesCard">
+            <div class="card-body d-flex flex-column">
+              <div class="kpi-icon-circle" aria-hidden="true"><i class="bi bi-file-earmark-text"></i></div>
+              <div class="kpi-label small text-body-secondary">Bulk quote requests</div>
+              <div class="kpi-value fs-3 fw-bold mb-1 tabular-nums" id="kpiQuotes">0</div>
+              <div class="kpi-helper small text-body-secondary" id="kpiQuotesHelper">Pending replies</div>
+            </div>
+          </a>
+        </div>
+        <!-- Avg feedback rating -->
+        <div class="col">
+          <a class="card kpi-card h-100 text-decoration-none" href="feedback.html" aria-label="Average feedback rating: No feedback yet. Open feedback." id="kpiRatingCard">
+            <div class="card-body d-flex flex-column">
+              <div class="kpi-icon-circle" aria-hidden="true"><i class="bi bi-star-fill"></i></div>
+              <div class="kpi-label small text-body-secondary">Avg feedback rating</div>
+              <div class="kpi-value fs-3 fw-bold mb-1 tabular-nums" id="kpiRating">No feedback yet</div>
+              <div class="kpi-helper small text-body-secondary" id="kpiRatingHelper">From 0 responses</div>
+              <div class="kpi-stars d-flex gap-1 mt-1" id="kpiStars" aria-hidden="true"></div>
+            </div>
+          </a>
+        </div>
+        <!-- Low / out of stock -->
+        <div class="col">
+          <a class="card kpi-card h-100 text-decoration-none" href="products.html?stock=low" aria-label="Low or out of stock items: 0. Open products filtered to low stock." id="kpiLowStockCard">
+            <div class="card-body d-flex flex-column">
+              <div class="kpi-icon-circle" aria-hidden="true"><i class="bi bi-box-seam"></i></div>
+              <div class="kpi-label small text-body-secondary">Low / out of stock</div>
+              <div class="kpi-value fs-3 fw-bold mb-1 tabular-nums" id="kpiLowStock">0</div>
+              <div class="kpi-helper small text-body-secondary" id="kpiLowStockHelper">Needs restock</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row g-4 mb-4">
+        <div class="col-lg-8">
+          <div class="card dashboard-panel mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center"><h2 class="h5 mb-0">Orders trend (last 7 days)</h2><div class="btn-group btn-group-sm" role="group"><button class="btn btn-outline-secondary active" type="button" data-chart-period="7">7 days</button><button class="btn btn-outline-secondary" type="button" data-chart-period="30">30 days</button></div></div>
+            <div class="card-body"><canvas id="ordersChart" height="120" aria-label="Orders per day chart"></canvas></div>
+          </div>
+          <div class="card dashboard-panel">
+            <div class="card-header d-flex justify-content-between align-items-center"><h2 class="h5 mb-0">Recent orders</h2><a href="orders.html" class="small fw-semibold text-decoration-none">View all</a></div>
+            <div class="table-responsive"><table class="table table-hover mb-0 align-middle"><thead><tr><th>Ref</th><th>Customer</th><th>Items</th><th>Status</th><th>Date</th></tr></thead><tbody id="recentOrdersBody"><tr><td colspan="5" class="text-body-secondary p-4">Loading...</td></tr></tbody></table></div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card dashboard-panel mb-4"><div class="card-header"><h2 class="h6 mb-0">Orders by status</h2></div><div class="card-body"><canvas id="statusChart" height="160" aria-label="Orders by status chart"></canvas></div></div>
+          <div class="card dashboard-panel mb-4"><div class="card-header"><h2 class="h6 mb-0">Orders by customer type</h2></div><div class="card-body"><canvas id="typeChart" height="160" aria-label="Orders by customer type chart"></canvas></div></div>
+          <div class="card dashboard-panel"><div class="card-header d-flex justify-content-between align-items-center"><h2 class="h6 mb-0">Out of stock</h2><a href="products.html" class="small text-decoration-none">Products</a></div><ul class="list-group list-group-flush" id="oosList"><li class="list-group-item text-body-secondary">Loading...</li></ul></div>
+        </div>
+      </div>
+
+      <!-- Plan KPIs -->
+      <div class="card dashboard-panel mb-4">
+        <div class="card-header"><h2 class="h5 mb-0">Plan KPIs</h2></div>
+        <div class="card-body" id="kpiPlanPanel"></div>
+      </div>
+    </div>
+  </main>
+
+  <div id="layout-footer"></div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+  <script src="../vendor/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" onerror="void 0"></script>
+</body>
+</html>

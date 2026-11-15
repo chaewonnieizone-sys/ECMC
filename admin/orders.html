@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Orders Admin | EC Marketing Corporation</title>
+  <meta name="description" content="Manage customer orders for EC Marketing Corporation.">
+  <link rel="icon" href="../images/logo.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../vendor/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" onerror="this.remove()">
+  <script src="../js/store.js"></script>
+  <script src="../js/cart.js"></script>
+  <script defer src="../js/products.js"></script>
+  <script defer src="../js/layout.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/admin.js"></script>
+</head>
+<body data-admin-page="orders">
+  <div id="layout-header"></div>
+
+  <main class="py-4 admin-main">
+    <div class="container-xl">
+    <section class="page-title-card page-title-card--charcoal mb-4">
+      <span class="page-title-card__label">Fulfillment</span>
+      <h1 class="page-title-card__title">Orders</h1>
+      <p class="page-title-card__text">Review, confirm, and update customer order status and details.</p>
+    </section>
+    <div class="card dashboard-panel mb-3"><div class="card-body"><div class="row g-3 align-items-end">
+      <div class="col-md-6"><label for="orderSearch" class="form-label">Search</label><input id="orderSearch" class="form-control" type="search" placeholder="Search orders" aria-label="Search by reference, name, or mobile"></div>
+      <div class="col-md-4"><label for="orderStatusFilter" class="form-label">Status</label><select id="orderStatusFilter" class="form-select"><option value="">All statuses</option><option>New</option><option>Confirmed (price and availability confirmed)</option><option>Paid</option><option>COD arranged</option><option>Out for delivery</option><option>Delivered</option><option>Cancelled</option></select></div>
+    </div></div></div>
+    <div class="card dashboard-panel"><div class="table-responsive"><table class="table align-middle mb-0 admin-orders-table" style="min-width: 900px;"><thead><tr><th class="col-ref">Ref</th><th class="col-customer">Customer</th><th class="col-items">Items</th><th class="col-total text-end">Total</th><th class="col-delivery d-none d-md-table-cell">Delivery</th><th class="col-payment d-none d-md-table-cell">Payment</th><th class="col-status">Status</th><th class="col-action text-center">Action</th></tr></thead><tbody id="ordersBody"><tr><td colspan="8" class="text-body-secondary p-4">Loading...</td></tr></tbody></table></div></div>
+    <div id="ordersCards" class="orders-cards"></div>
+  </div></main>
+
+  <div id="layout-footer"></div>
+
+  <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="omRef" aria-hidden="true"><div class="modal-dialog modal-lg modal-dialog-scrollable"><div class="modal-content">
+    <div class="modal-header"><div><h2 class="modal-title h5 mb-0" id="omRef">Order</h2><div class="small text-body-secondary" id="omDate"></div></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+    <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+      <div class="row g-3 mb-3">
+        <div class="col-md-6"><div class="small text-body-secondary">Customer</div><div class="fw-semibold" id="omName"></div><div id="omMobile"></div><div class="small" id="omAddress"></div></div>
+        <div class="col-md-6"><div class="small text-body-secondary">Details</div><div>Type: <span id="omType"></span></div><div>Delivery: <span id="omDelivery"></span></div><div>Payment: <span id="omPayment"></span></div><div class="fw-semibold mt-1">Total: <span id="omTotal"></span></div></div>
+      </div>
+      <div class="mb-3"><div class="small text-body-secondary mb-1">Notes</div><div id="omNotes" class="border rounded p-2 bg-body-tertiary"></div></div>
+      <h3 class="h6 mb-2">Items</h3><ul class="list-group mb-3 admin-order-items" id="omItems"></ul>
+      <h3 class="h6 mb-2">Timeline</h3><ul class="list-group mb-3" id="omTimeline"></ul>
+      
+      <!-- View mode (default) -->
+      <div id="orderViewMode">
+        <div class="card bg-body-tertiary border-0 mb-3">
+          <div class="card-body">
+            <div class="row g-3 align-items-end" id="viewFields">
+              <div class="col-md-6"><label class="form-label small">Status</label><div class="form-control-plaintext fw-semibold" id="viewStatus"></div></div>
+              <div class="col-md-6"><label class="form-label small">Payment method</label><div class="form-control-plaintext" id="viewPaymentMethod"></div></div>
+              <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" id="viewPickupReady" disabled><label class="form-check-label small" for="viewPickupReady">Ready for pickup</label></div></div>
+              <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" id="viewDeliveredMark" disabled><label class="form-check-label small" for="viewDeliveredMark">Delivered</label></div></div>
+              <div class="col-12"><label class="form-label small">Staff note</label><div class="form-control-plaintext small" id="viewStaffNote"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end gap-2 mt-2">
+          <button type="button" class="btn btn-outline-primary" id="btnEditOrder"><i class="bi bi-pencil me-1"></i> Edit order</button>
+        </div>
+      </div>
+      
+      <!-- Edit mode (hidden by default) -->
+      <div id="orderEditMode" class="d-none">
+        <div class="alert alert-info small mb-3"><i class="bi bi-info-circle me-1"></i>Editing order. Changes will be saved to the order record.</div>
+        <div class="card bg-body-tertiary border-0 mb-3">
+          <div class="card-body">
+            <div class="row g-3 align-items-end">
+              <div class="col-md-6"><label class="form-label small" for="omStatus">Update status</label><select class="form-select form-select-sm" id="omStatus"><option>New</option><option>Confirmed (price and availability confirmed)</option><option>Paid</option><option>COD arranged</option><option>Out for delivery</option><option>Delivered</option><option>Cancelled</option></select></div>
+              <div class="col-md-6"><label class="form-label small" for="omPaymentMethodEdit">Payment method</label><select class="form-select form-select-sm" id="omPaymentMethodEdit"><option value="">—</option><option>Cash on delivery</option><option>Pay on pickup</option><option>GCash</option></select></div>
+              <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" id="omPickupReady"><label class="form-check-label small" for="omPickupReady">Mark ready for pickup</label></div></div>
+              <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" id="omDeliveredMark"><label class="form-check-label small" for="omDeliveredMark">Mark as delivered</label></div></div>
+              <div class="col-12"><label class="form-label small" for="omStaffNote">Staff note</label><input class="form-control form-control-sm" id="omStaffNote" type="text" placeholder="Internal note"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer"><button type="button" class="btn btn-outline-secondary" id="omPrint"><i class="bi bi-printer me-1"></i> Print slip</button><button type="button" class="btn btn-primary d-none" id="omSave"><i class="bi bi-check-lg me-1"></i> Save changes</button><button type="button" class="btn btn-outline-secondary d-none" id="omCancelEdit"><i class="bi bi-x-lg me-1"></i> Cancel</button></div>
+  </div></div></div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+  <script src="../vendor/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" onerror="void 0"></script>
+</body>
+</html>
